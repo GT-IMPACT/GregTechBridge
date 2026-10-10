@@ -5,6 +5,19 @@ import java.util.function.Supplier
 
 enum class Mixins(builder: Builder) {
 
+    DURADISPLAY_GREGTECH_ITEMS(
+        Builder("DuraDisplay GregTech Impact items")
+            .setPhase(Phase.LATE)
+            .addTargetedMod(TargetedMod.DURADISPLAY)
+            .addTargetedMod(TargetedMod.GREGTECH)
+            .addMixinClasses(
+                "duradisplay.OverlayDurabilityLikeMixin",
+                "duradisplay.ModSelfDrawnBarMixin"
+            )
+            .setApplyIf { true }
+            .setSide(Side.CLIENT)
+    ),
+
 //    SUPPORT_VANILA_CHUNKS_NBT(
 //        Builder("Support Vanila Chunks Nbt")
 //            .setPhase(Phase.EARLY)
@@ -90,7 +103,7 @@ enum class Mixins(builder: Builder) {
         return true
     }
 
-    private fun shouldLoad(loadedCoreMods: Set<String>, loadedMods: Set<String>): Boolean {
+    fun shouldLoad(loadedCoreMods: Set<String>, loadedMods: Set<String>): Boolean {
         return (shouldLoadSide() && applyIf?.get() == true
                 && allModsLoaded(targetedMods, loadedCoreMods, loadedMods)
                 && noModsLoaded(excludedMods, loadedCoreMods, loadedMods))

@@ -13,6 +13,7 @@ class VWLateMixins : ILateMixinLoader {
     override fun getMixins(loadedMods: MutableSet<String>): MutableList<String> {
         return Mixins.entries
             .filter { it.phase == Phase.LATE }
+            .filter { it.shouldLoad(emptySet(), loadedMods) }
             .map { it.mixinClasses }
             .flatten()
             .toMutableList()

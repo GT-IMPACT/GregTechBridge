@@ -6,4 +6,6 @@ enum class TargetedMod(
     val modId: String? = null
 ) {
     VANILLA("Minecraft", null),
+    DURADISPLAY("DuraDisplay", null, "duradisplay"),
+    GREGTECH("GregTech", null, "gregtech"),
 }
