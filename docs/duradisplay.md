@@ -42,7 +42,7 @@ Java-миксины: `OverlayDurabilityLikeMixin`, `ModSelfDrawnBarMixin`. Kotli
 | GregTech | Optional для мода; нужен для нашей интеграции | `after:gregtech`, без ограничения версии | GT5-Unofficial 5.09.54.112, dev-only | Impact 5.09.35.37 с мостом |
 | EnderIO | Optional | При наличии задан порядок `after:EnderIO@[2.4.18,)` | 2.10.40, compile-only | Нижняя граница взята из метаданных, не из версии компиляции |
 | IC2 | Optional | Нижняя граница в DuraDisplay не задана | 2.2.828-experimental, compile-only | Явно задана 2.2.828-experimental; в клиентском логе также присутствовала транзитивная 2.2.827 — точный универсальный минимум не установлен |
-| Applied Energistics 2 | Optional | Нижняя граница не задана; отсутствие AE2 обрабатывается | rv3-beta-1042-GTNH, compile-only | В сборке Impact используется rv3-beta-400-GTNH; расширенные сценарии AE2 отдельно не подтверждены |
+| Applied Energistics 2 | Optional | Нижняя граница не задана; отсутствие AE2 обрабатывается | rv3-beta-1042-GTNH, compile-only | В проекте обновлён до rv3-beta-1082-GTNH; [мост AE2](applied-energistics-2.md), расширенные overlays отдельно не проверены |
 | Forestry | Optional | Нижняя граница не задана; нужен API рюкзаков | 4.11.37, compile-only | Новая интеграция с 1.4.0; не проверялась |
 | Botania | Optional | Нижняя граница не задана | 1.13.34-GTNH, compile-only | Не проверялась |
 | TinkersConstruct | Optional | Нижняя граница не задана | 1.14.104-GTNH, compile-only | Не проверялась |
