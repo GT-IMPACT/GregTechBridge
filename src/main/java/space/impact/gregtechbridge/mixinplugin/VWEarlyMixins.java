@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.7.10")
+@IFMLLoadingPlugin.TransformerExclusions("space.impact.gregtechbridge.asm")
 public class VWEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
@@ -29,7 +30,10 @@ public class VWEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        return new String[] {
+            "space.impact.gregtechbridge.asm.Ae2ImpactTransformer",
+            "space.impact.gregtechbridge.asm.NeeImpactTransformer"
+        };
     }
 
     @Override

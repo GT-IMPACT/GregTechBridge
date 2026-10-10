@@ -1,9 +1,30 @@
 package space.impact.gregtechbridge.mixinplugin
 
 import cpw.mods.fml.relauncher.FMLLaunchHandler
+import space.impact.gregtechbridge.asm.Ae2ImpactTransformer
 import java.util.function.Supplier
 
 enum class Mixins(builder: Builder) {
+
+    AE2_GREGTECH_COLOR(
+        Builder("AE2 GregTech Impact color removal")
+            .setPhase(Phase.LATE)
+            .addTargetedMod(TargetedMod.APPLIED_ENERGISTICS)
+            .addTargetedMod(TargetedMod.GREGTECH)
+            .addMixinClasses("ae2.GregTechIntegrationMixin")
+            .setApplyIf { Ae2ImpactTransformer.isImpactPresent() }
+            .setSide(Side.BOTH)
+    ),
+
+    NEE_GREGTECH_CLASSES(
+        Builder("NotEnoughEnergistics GregTech Impact classes")
+            .setPhase(Phase.LATE)
+            .addTargetedMod(TargetedMod.NOT_ENOUGH_ENERGISTICS)
+            .addTargetedMod(TargetedMod.GREGTECH)
+            .addMixinClasses("nee.GregTechRecipeProcessorMixin", "nee.ItemUtilsMixin")
+            .setApplyIf { Ae2ImpactTransformer.isImpactPresent() }
+            .setSide(Side.BOTH)
+    ),
 
     NEI_GREGTECH_TOOL_SOUNDS(
         Builder("NEI GregTech Impact tool sounds")

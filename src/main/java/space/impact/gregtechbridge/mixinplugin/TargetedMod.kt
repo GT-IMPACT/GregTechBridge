@@ -9,4 +9,6 @@ enum class TargetedMod(
     DURADISPLAY("DuraDisplay", null, "duradisplay"),
     GREGTECH("GregTech", null, "gregtech"),
     NOT_ENOUGH_ITEMS("NotEnoughItems", null, "NotEnoughItems"),
+    APPLIED_ENERGISTICS("Applied Energistics 2", null, "appliedenergistics2"),
+    NOT_ENOUGH_ENERGISTICS("NotEnoughEnergistics", null, "neenergistics"),
 }
