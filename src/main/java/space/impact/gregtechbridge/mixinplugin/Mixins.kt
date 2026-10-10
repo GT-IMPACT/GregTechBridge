@@ -5,6 +5,16 @@ import java.util.function.Supplier
 
 enum class Mixins(builder: Builder) {
 
+    NEI_GREGTECH_TOOL_SOUNDS(
+        Builder("NEI GregTech Impact tool sounds")
+            .setPhase(Phase.LATE)
+            .addTargetedMod(TargetedMod.NOT_ENOUGH_ITEMS)
+            .addTargetedMod(TargetedMod.GREGTECH)
+            .addMixinClasses("nei.MetaGeneratedToolMixin")
+            .setApplyIf { true }
+            .setSide(Side.CLIENT)
+    ),
+
     DURADISPLAY_GREGTECH_ITEMS(
         Builder("DuraDisplay GregTech Impact items")
             .setPhase(Phase.LATE)

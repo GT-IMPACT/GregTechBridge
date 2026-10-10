@@ -1,3 +1,4 @@
+import com.gtnewhorizons.retrofuturagradle.modutils.ModUtils
 import settings.getVersionMod
 
 plugins {
@@ -36,15 +37,22 @@ repositories {
     }
 }
 
+val modUtils = extensions.getByType<ModUtils>()
+
 dependencies {
     api("space.impact:Forgelin:2.1.1")
+    implementation("com.github.GTNewHorizons:NotEnoughItems:2.8.158-GTNH:dev")
     implementation("com.github.GTNewHorizons:DuraDisplay:1.4.6:dev") {
         isTransitive = false
     }
     implementation("space.impact:gregtech-impact:5.09.35.37:dev") {
         exclude(group = "space.impact", module = "VirtualWorld")
+        exclude(group = "com.github.GTNewHorizons", module = "CodeChickenCore")
     }
 
-    runtimeOnlyNonPublishable("space.impact:VirtualWorld:2.0.3")
+    runtimeOnlyNonPublishable("space.impact:VirtualWorld:2.0.3") {
+        exclude(group = "com.github.GTNewHorizons", module = "CodeChickenCore")
+    }
     runtimeOnlyNonPublishable("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+    runtimeOnlyNonPublishable(modUtils.deobfuscate("curse.maven:journeymap-32274:4500659"))
 }

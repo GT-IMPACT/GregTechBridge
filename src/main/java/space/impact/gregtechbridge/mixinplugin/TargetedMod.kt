@@ -8,4 +8,5 @@ enum class TargetedMod(
     VANILLA("Minecraft", null),
     DURADISPLAY("DuraDisplay", null, "duradisplay"),
     GREGTECH("GregTech", null, "gregtech"),
+    NOT_ENOUGH_ITEMS("NotEnoughItems", null, "NotEnoughItems"),
 }
