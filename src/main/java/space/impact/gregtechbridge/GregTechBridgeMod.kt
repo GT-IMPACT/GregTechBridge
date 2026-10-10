@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package space.impact.modid
+package space.impact.gregtechbridge
 
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.Mod
@@ -13,8 +13,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent
 import cpw.mods.fml.common.event.FMLServerStoppedEvent
 import cpw.mods.fml.common.event.FMLServerStoppingEvent
 import cpw.mods.fml.relauncher.Side
-import space.impact.modid.proxy.ClientProxy
-import space.impact.modid.proxy.CommonProxy
+import space.impact.gregtechbridge.proxy.ClientProxy
+import space.impact.gregtechbridge.proxy.CommonProxy
 
 @Mod(
     modid = BuildConfig.MODID,
