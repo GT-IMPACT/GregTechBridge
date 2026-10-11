@@ -41,10 +41,6 @@ val modUtils = extensions.getByType<ModUtils>()
 
 dependencies {
     testImplementation("junit:junit:4.13.2")
-    // Regression fixture containing the legacy NEE integration used by Impact-Core.
-    testImplementation("space.impact:Impact-Core:1.1.0.36:dev") {
-        isTransitive = false
-    }
     api("space.impact:Forgelin:2.1.1")
     implementation("com.github.GTNewHorizons:NotEnoughItems:2.8.158-GTNH:dev")
     implementation("com.github.GTNewHorizons:DuraDisplay:1.4.6:dev") {

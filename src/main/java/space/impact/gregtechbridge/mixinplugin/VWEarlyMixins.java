@@ -31,8 +31,7 @@ public class VWEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public String[] getASMTransformerClass() {
         return new String[] {
-            "space.impact.gregtechbridge.asm.Ae2ImpactTransformer",
-            "space.impact.gregtechbridge.asm.NeeImpactTransformer"
+            "space.impact.gregtechbridge.asm.Ae2ImpactTransformer"
         };
     }
 

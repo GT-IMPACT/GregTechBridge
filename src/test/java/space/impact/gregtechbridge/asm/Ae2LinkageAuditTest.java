@@ -140,9 +140,6 @@ public class Ae2LinkageAuditTest {
                     "appeng.items.tools.ToolNetworkVisualiser").contains(name)) {
                     original = Ae2ImpactTransformer.transformImpactClass(name, original);
                 }
-                if (name.equals("com.github.vfyjxf.nee.processor.GregTech5RecipeProcessor")) {
-                    original = NeeImpactTransformer.restoreLegacyApi(original);
-                }
                 ClassNode node = parse(original);
                 if (node.name.equals("appeng/integration/modules/GT")) {
                     ClassNode mixin = resolve("space/impact/gregtechbridge/mixins/late/ae2/GregTechIntegrationMixin");
@@ -212,16 +209,13 @@ public class Ae2LinkageAuditTest {
         List<ClassNode> fluid = jar("com/glodblock/github/FluidCraft");
         List<ClassNode> wireless = jar("net/p455w0rd/wirelesscraftingterminal/common/WirelessCraftingTerminal");
         List<ClassNode> gregtech = jar("gregtech/api/GregTech_API");
-        List<ClassNode> core = jar("com/impact/addon/nei/impactplugin/RecipeProcessorBase");
         scan(ae2, false);
         scan(nee, false);
         scan(fluid, false);
         scan(wireless, false);
         scan(gregtech, true);
-        scan(core, true);
         scan(Collections.singletonList(resolve("space/impact/gregtechbridge/compat/Ae2GregTechCompat")), false);
         callbacks(gregtech);
-        callbacks(core);
         callbacks(nee);
         callbacks(fluid);
         callbacks(wireless);
