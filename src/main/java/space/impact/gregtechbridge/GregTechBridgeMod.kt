@@ -17,9 +17,9 @@ import space.impact.gregtechbridge.proxy.ClientProxy
 import space.impact.gregtechbridge.proxy.CommonProxy
 
 @Mod(
-    modid = BuildConfig.MODID,
-    version = BuildConfig.VERSION,
-    name = BuildConfig.MODNAME,
+    modid = MODID,
+    version = VERSION,
+    name = MODNAME,
     modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter",
     acceptedMinecraftVersions = "[1.7.10]",
     dependencies = "required-after:forgelin;",

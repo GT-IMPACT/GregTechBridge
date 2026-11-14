@@ -6,6 +6,17 @@ import java.util.function.Supplier
 
 enum class Mixins(builder: Builder) {
 
+    PLAYER_BLOCK_PLACEMENT(
+        Builder("Skip item sync when the open container has no held-item slot")
+            .setPhase(Phase.EARLY)
+            .addTargetedMod(TargetedMod.VANILLA)
+            .addMixinClasses("minecraft.NetHandlerPlayServerMixin")
+            .setApplyIf {
+                true
+            }
+            .setSide(Side.BOTH),
+    ),
+
     AE2_GREGTECH_COLOR(
         Builder("AE2 GregTech Impact color removal")
             .setPhase(Phase.LATE)

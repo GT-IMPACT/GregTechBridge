@@ -13,6 +13,10 @@ import org.objectweb.asm.tree.*;
 
 /** Checks symbolic API references without initializing Minecraft or GregTech. */
 public class Ae2LinkageAuditTest {
+    private static final String NEE_GT_PROCESSOR = "com/github/vfyjxf/nee/processor/GregTech5RecipeProcessor";
+    private static final String DISENTANGLE_DESCRIPTOR =
+        "(Lcodechicken/nei/PositionedStack;)Lcodechicken/nei/PositionedStack;";
+
     private final Map<String, ClassNode> classes = new HashMap<>();
     private final Set<String> missing = new TreeSet<>();
     private int checked;
@@ -156,6 +160,71 @@ public class Ae2LinkageAuditTest {
         return result;
     }
 
+    private AbstractInsnNode previousOpcode(AbstractInsnNode instruction) {
+        AbstractInsnNode previous = instruction.getPrevious();
+        while (previous != null && previous.getOpcode() < 0) {
+            previous = previous.getPrevious();
+        }
+        return previous;
+    }
+
+    private boolean isDisentangleReference(Object value) {
+        if (value instanceof Handle) {
+            Handle handle = (Handle) value;
+            return handle.getOwner().equals(NEE_GT_PROCESSOR) && handle.getName().equals("disentangle")
+                && handle.getDesc().equals(DISENTANGLE_DESCRIPTOR);
+        }
+        return false;
+    }
+
+    private boolean isGuardedByIsNH(InvokeDynamicInsnNode reference) {
+        AbstractInsnNode loadInputs = previousOpcode(reference);
+        if (!(loadInputs instanceof VarInsnNode) || loadInputs.getOpcode() != Opcodes.ALOAD) {
+            return false;
+        }
+        AbstractInsnNode jump = previousOpcode(loadInputs);
+        if (!(jump instanceof JumpInsnNode) || jump.getOpcode() != Opcodes.IFEQ) {
+            return false;
+        }
+        AbstractInsnNode condition = previousOpcode(jump);
+        if (!(condition instanceof FieldInsnNode) || condition.getOpcode() != Opcodes.GETFIELD) {
+            return false;
+        }
+        FieldInsnNode field = (FieldInsnNode) condition;
+        return field.owner.equals(NEE_GT_PROCESSOR) && field.name.equals("isNH") && field.desc.equals("Z")
+            && reference.getNext() == previousOpcode(((JumpInsnNode) jump).label);
+    }
+
+    private void verifyDisentangleIsGtnhOnly(ClassNode node, MethodNode disentangle) throws IOException {
+        assertNull("NEE must select the Impact branch", resolve("gregtech/api/recipe/RecipeMap"));
+        assertTrue("disentangle must be private", (disentangle.access & Opcodes.ACC_PRIVATE) != 0);
+        int guardedReferences = 0;
+        for (MethodNode method : node.methods) {
+            for (AbstractInsnNode instruction : method.instructions.toArray()) {
+                String caller = node.name + "." + method.name;
+                if (instruction instanceof MethodInsnNode) {
+                    MethodInsnNode call = (MethodInsnNode) instruction;
+                    assertFalse(caller + " calls disentangle directly",
+                        call.owner.equals(node.name) && call.name.equals(disentangle.name)
+                            && call.desc.equals(disentangle.desc));
+                } else if (instruction instanceof InvokeDynamicInsnNode) {
+                    InvokeDynamicInsnNode call = (InvokeDynamicInsnNode) instruction;
+                    assertFalse(caller + " uses disentangle as a bootstrap method", isDisentangleReference(call.bsm));
+                    for (Object argument : call.bsmArgs) {
+                        if (isDisentangleReference(argument)) {
+                            assertTrue(caller + " must guard disentangle with isNH", isGuardedByIsNH(call));
+                            guardedReferences++;
+                        }
+                    }
+                } else if (instruction instanceof LdcInsnNode) {
+                    assertFalse(caller + " loads a handle to disentangle",
+                        isDisentangleReference(((LdcInsnNode) instruction).cst));
+                }
+            }
+        }
+        assertEquals("Expected one GTNH-only reference to disentangle", 1, guardedReferences);
+    }
+
     private void scan(List<ClassNode> nodes, boolean reverse) throws Exception {
         for (ClassNode node : nodes) {
             // Development-only GTNH test fixtures are not mod integration paths.
@@ -164,6 +233,11 @@ public class Ae2LinkageAuditTest {
             for (String iface : node.interfaces) type("L" + iface + ";", node.name, reverse);
             for (FieldNode field : node.fields) type(field.desc, node.name, reverse);
             for (MethodNode method : node.methods) {
+                if (node.name.equals(NEE_GT_PROCESSOR) && method.name.equals("disentangle")
+                    && method.desc.equals(DISENTANGLE_DESCRIPTOR)) {
+                    verifyDisentangleIsGtnhOnly(node, method);
+                    continue;
+                }
                 // These two lambdas are only invoked from the isNH=true RecipeCategory branch.
                 if (node.name.equals("com/github/vfyjxf/nee/processor/GregTech5RecipeProcessor")
                     && method.name.startsWith("lambda$getAllOverlayIdentifier$")
